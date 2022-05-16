@@ -48,7 +48,8 @@ class IviApiResponseResult(BaseModel):
             return posters[0].url
         return "http://n_a.ru"
 
-    def get_year_of_content(self) -> Union[str, int]:
+    @property
+    def year_of_content(self) -> Union[str, int]:
         if year := self.year:
             return year
         year_from, year_to = min(self.years), max(self.years)

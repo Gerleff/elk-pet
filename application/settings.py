@@ -3,6 +3,8 @@ from typing import Union
 from aiohttp import ClientTimeout, BasicAuth
 from pydantic import BaseSettings, validator, AnyHttpUrl
 
+from application.models import IviApiResponseResult
+
 
 class ELKSettings(BaseSettings):
     ELASTIC_HOST: str = "localhost"
@@ -54,6 +56,21 @@ class HTTPSettings(BaseSettings):
 
 class IviSettings(BaseSettings):
     LIMIT: int = 10
+    IVI_API_LINK: str = None
+
+    @validator("IVI_API_LINK")
+    def api_link(cls, v):
+        if v:
+            return v
+        base_link = (
+            "https://api.ivi.ru/mobileapi/autocomplete/common/v7/"
+            "?query={name}"
+            "&limit={limit}"
+            "&app_version=870"
+            "&object_type=content"
+            "&fields="
+        )
+        return base_link + ",".join(IviApiResponseResult.__fields__.keys())
 
 
 class Settings:

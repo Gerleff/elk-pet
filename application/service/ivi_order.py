@@ -4,7 +4,6 @@ from application.models import IviApiResponseResult, IviApiResponse
 from application.service.elastic import ElasticWizard
 from application.service.http import HTTPClient, get_external_api_headers
 from application.settings import Settings
-from application.text import ivi_api_link
 
 VID_TYPE_MAP = {"film": "Фильм", "serial": "Сериал"}
 
@@ -14,7 +13,7 @@ class IviOrderManager:
 
     @classmethod
     async def run(cls, message: str):
-        api_link = ivi_api_link.format(name=message, limit=cls.api_limit)
+        api_link = Settings.ivi.IVI_API_LINK.format(name=message, limit=cls.api_limit)
         objects = await cls.send_request(api_link)
         already_have_titles = await cls.check_if_content_already_in_db(objects)
         titles = []

@@ -23,7 +23,6 @@ async def get_film(film: str, content_type: ContentTypeEnum):
         "content": [
             IviApiResponseResult(**item["_source"]).dict(include={"title", "object_type"})
             for item in result["hits"]["hits"]
-            # if item["_score"] > 0.5
         ]
     }
 

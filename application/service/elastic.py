@@ -37,6 +37,7 @@ class ElasticWizard:
                         "multi_match": {
                             "query": film,
                             "fields": ["title", "description"],
+                            "tie_breaker": Settings.elk.ELASTIC_SEARCH_TIE_BREAKER
                         }
                     }
                 },

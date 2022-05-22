@@ -1,7 +1,7 @@
 from typing import Union
 
 from aiohttp import ClientTimeout, BasicAuth
-from pydantic import BaseSettings, validator, AnyHttpUrl
+from pydantic import BaseSettings, validator, AnyHttpUrl, confloat
 
 from application.models import IviApiResponseResult
 
@@ -10,6 +10,7 @@ class ELKSettings(BaseSettings):
     ELASTIC_HOST: str = "localhost"
     ELASTIC_PORT: str = "9200"
     IVI_INDEX: str = "/ivi"
+
     ELASTIC_IVI_PATH: Union[AnyHttpUrl, str] = None
 
     @validator("ELASTIC_IVI_PATH", pre=True)
@@ -29,6 +30,8 @@ class ELKSettings(BaseSettings):
     @property
     def elastic_auth(self) -> BasicAuth:
         return BasicAuth(self.ELASTIC_LOGIN, self.ELASTIC_PASSWORD)
+
+    ELASTIC_SEARCH_TIE_BREAKER: confloat(ge=0.0, le=1.0) = 0.3
 
 
 class HTTPSettings(BaseSettings):
